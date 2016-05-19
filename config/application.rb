@@ -22,5 +22,8 @@ module Workspace
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
+    
+    # Something for Bootstrap that has to do with compiling images in vendor assets by default
+    config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)
   end
 end
