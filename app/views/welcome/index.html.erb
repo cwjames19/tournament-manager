@@ -1,9 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-  
+  <link type="text/css" rel="stylesheet" href="/app/assets/stylesheets/"
 </head>
 <body>
-  <h2>This is the landing page for Tournament Manager!</h2>
+  <section class="container landing-container">
+    <div class="row">
+      <div class="col-sm-6 col-push-6">
+        <div class="landing-selling-point col-sm-12 col-xs-6">
+          <h2>Selling Point 1</h2>
+          <p>more information on why this site is useful and awesome.</p>
+        </div>
+        <div class="landing-selling-point col-sm-12 col-xs-6">
+          <h2>Selling Point 2</h2>
+          <p>more information on why this site is useful and awesome.</p>
+        </div>
+        <div class="landing-selling-point col-sm-12 center-block">
+          <h2>Selling Point 3</h2>
+          <p>more information on why this site is useful and awesome.</p>
+        </div>
+      </div>
+      <div class="col-sm-6 col-pull-6">
+        <h2 class="text-center">Get started now!</h2>
+        <div class="half-jumbotron">
+          <h4 class="text-center">Fast and easy to create!<br />Your custom tournament bracket is just clicks away!</h4>
+          <a class="btn btn-info" id="begin" href="<%= new_tournament_path %>" type="submit">Begin</a>
+        </div>
+      </div>
+    </div>
+  </section>
 </body>
 </html>

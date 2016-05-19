@@ -11,7 +11,43 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160518071722) do
+ActiveRecord::Schema.define(version: 20160519052906) do
+
+  create_table "matches", force: :cascade do |t|
+    t.integer  "match_number"
+    t.string   "winner"
+    t.string   "loser"
+    t.string   "team_home"
+    t.string   "team_visitor"
+    t.string   "result_home"
+    t.string   "result_visitor"
+    t.string   "overtime_home"
+    t.string   "overtime_visitor"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  create_table "teams", force: :cascade do |t|
+    t.string   "name"
+    t.string   "image"
+    t.integer  "seed"
+    t.integer  "placement"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "tournaments", force: :cascade do |t|
+    t.string   "name"
+    t.string   "tournament_type",    default: "single elimination"
+    t.boolean  "play_out_all_games"
+    t.boolean  "bronze_medal_game"
+    t.string   "image"
+    t.boolean  "public",             default: true
+    t.text     "teams"
+    t.boolean  "normal_scoring"
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
