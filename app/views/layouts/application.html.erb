@@ -3,6 +3,7 @@
 <head>
   <title>Tournament Manager</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link type="text/css.sass" rel="stylesheet" href="/app/assets/stylesheets/application.css.sass">
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
@@ -12,6 +13,9 @@
       <div class="container-fluid">
         <div class="navbar-header">
           <a class="navbar-brand" href="/">Tournament Manager</a>
+          <% if user_signed_in? %>
+            <span class="nav navbar-nav navbar-left" id="current-user-email"><%= current_user.email %></span>
+          <% end %>
         </div>
         <ul class="nav navbar-nav navbar-right">
           <li><a href="#">About</a></li>

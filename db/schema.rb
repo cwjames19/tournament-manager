@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160519052906) do
+ActiveRecord::Schema.define(version: 20160525023244) do
 
   create_table "matches", force: :cascade do |t|
     t.integer  "match_number"
@@ -25,29 +25,49 @@ ActiveRecord::Schema.define(version: 20160519052906) do
     t.string   "overtime_visitor"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
+    t.integer  "tournament_id"
   end
+
+  add_index "matches", ["tournament_id"], name: "index_matches_on_tournament_id"
+
+  create_table "matches_teams", id: false, force: :cascade do |t|
+    t.integer "match_id"
+    t.integer "team_id"
+  end
+
+  add_index "matches_teams", ["match_id"], name: "index_matches_teams_on_match_id"
+  add_index "matches_teams", ["team_id"], name: "index_matches_teams_on_team_id"
 
   create_table "teams", force: :cascade do |t|
     t.string   "name"
     t.string   "image"
     t.integer  "seed"
     t.integer  "placement"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.integer  "tournaments_id"
   end
+
+  add_index "teams", ["tournaments_id"], name: "index_teams_on_tournaments_id"
 
   create_table "tournaments", force: :cascade do |t|
     t.string   "name"
-    t.string   "tournament_type",    default: "single elimination"
-    t.boolean  "play_out_all_games"
-    t.boolean  "bronze_medal_game"
+    t.integer  "tournament_type"
+    t.integer  "extra_game_option"
     t.string   "image"
-    t.boolean  "public",             default: true
-    t.text     "teams"
+    t.boolean  "public",            default: true
+    t.text     "teams_raw"
     t.boolean  "normal_scoring"
-    t.datetime "created_at",                                        null: false
-    t.datetime "updated_at",                                        null: false
+    t.integer  "user_id"
+    t.integer  "teams_id"
+    t.integer  "matches_id"
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
   end
+
+  add_index "tournaments", ["matches_id"], name: "index_tournaments_on_matches_id"
+  add_index "tournaments", ["teams_id"], name: "index_tournaments_on_teams_id"
+  add_index "tournaments", ["user_id"], name: "index_tournaments_on_user_id"
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false

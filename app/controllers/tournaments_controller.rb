@@ -4,6 +4,7 @@ class TournamentsController < ApplicationController
   end
   
   def create
+    @user = current_user
     @tournament = @user.tournaments.build(tournament_params)
     
     if @tournament.save!
@@ -22,6 +23,6 @@ class TournamentsController < ApplicationController
   private
   
   def tournament_params
-    params.require(:tournament).permit(:name, :tournament_type, :play_out_all_games, :bronze_medal_game, :image, :public, :teams, :normal_scoring)
+    params.require(:tournament).permit(:name, :tournament_type, :extra_game_options, :image, :public, :teams_raw, :normal_scoring)
   end
 end
