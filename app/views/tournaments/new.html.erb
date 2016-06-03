@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link type="text/css" rel="stylesheet" href="/app/assets/stylesheets/tournaments/new_tournament.scss">
+    <link type="text/css" rel="stylesheet" href="/app/assets/stylesheets/tournaments/tournaments_new.scss">
   </head>
   <body>
     <div class="container">
@@ -26,8 +26,11 @@
             </ul>
             
             <%= f.label :teams_raw, "Teams" %><br />
+            <%= f.label :num_teams, "No. Teams" %>
+            <%= f.select :num_teams, [[16, 16], [8, 8], [4, 4], [2, 2]] %><br />
             <p>Enter each team's name on a separate line.</p>
-            <p>Enter each team's ranking before the team name and separate with a comma. All teams must be given a seed. (OPTIONAL)</p>
+            <p>Enter each team's ranking before the team name and separate with a comma (e.g., "1, The Mighty Ducks")</p>
+            <p>If you choose to seed your tournament, all teams must be given an initial seed.</p>
             <%= f.text_area :teams_raw, placeholder: "Enter teams and seeds here", cols: 45, rows: 8 %><br />
             
             <%= f.label :public, "Public" %>

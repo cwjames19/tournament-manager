@@ -7,13 +7,24 @@ class TournamentsController < ApplicationController
     @user = current_user
     @tournament = @user.tournaments.build(tournament_params)
     
-    if @tournament.save!
-      flash[:notice] = "Tournament created."
-      redirect_to @tournament
-    else
-      flash[:warning] = "An error occurred. Please try again."
-      render new_tournament_path
+    begin
+      new_tournament = InitTournament.new(tournament_params)
+      
+      if @tournament.validate! && new_tournament.validate_teams.success?
+        @tournament.save!
+      else
+        flash[:alert] = "Didn't pass validation. Please try again."
+        render new_tournament_path and return
+      end
+      
+      new_tournament.fill_in_tournament(Tournament.last)
+    rescue
+      flash[:alert] = "Unknown error raised. Please try again."
+      render new_tournament_path and return
     end
+    
+    flash[:notice] = "Tournament created."
+    redirect_to @tournament
   end
   
   def show
@@ -23,6 +34,6 @@ class TournamentsController < ApplicationController
   private
   
   def tournament_params
-    params.require(:tournament).permit(:name, :tournament_type, :extra_game_options, :image, :public, :teams_raw, :normal_scoring)
+    params.require(:tournament).permit(:name, :tournament_type, :extra_game_option, :num_teams, :public, :teams_raw, :normal_scoring)
   end
 end
