@@ -43,6 +43,7 @@ group :development, :test do
   gem 'byebug'
   # Use RSpec for writing tests for models and controllers
   gem 'rspec-rails', '~> 3.4'
+  gem 'factory_girl_rails'
 end
 
 group :development do

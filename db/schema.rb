@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160525082703) do
+ActiveRecord::Schema.define(version: 20160608081201) do
 
   create_table "matches", force: :cascade do |t|
     t.integer  "match_number"
@@ -26,6 +26,8 @@ ActiveRecord::Schema.define(version: 20160525082703) do
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.integer  "tournament_id"
+    t.integer  "round"
+    t.integer  "sub_bracket"
   end
 
   add_index "matches", ["tournament_id"], name: "index_matches_on_tournament_id"
@@ -43,17 +45,17 @@ ActiveRecord::Schema.define(version: 20160525082703) do
     t.string   "image"
     t.integer  "seed"
     t.integer  "placement"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
-    t.integer  "tournaments_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.integer  "tournament_id"
   end
 
-  add_index "teams", ["tournaments_id"], name: "index_teams_on_tournaments_id"
+  add_index "teams", ["tournament_id"], name: "index_teams_on_tournament_id"
 
   create_table "tournaments", force: :cascade do |t|
     t.string   "name"
-    t.integer  "tournament_type"
-    t.integer  "extra_game_option"
+    t.integer  "tournament_type",   default: 0
+    t.integer  "extra_game_option", default: 0
     t.string   "image"
     t.boolean  "public",            default: true
     t.text     "teams_raw"
