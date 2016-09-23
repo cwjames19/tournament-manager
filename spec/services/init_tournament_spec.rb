@@ -96,22 +96,8 @@ describe InitTournament do
     #   new/old seeding (take the lowest of the prior match)
     #   tournament to which it belongs
     #   sub_bracket
-    #   round?
-    describe "#generate_matches" do
-      context "with 8 teams" do
-        it "creates the proper number of matches" do
-        
-        end
-        
-        it "assigns teams exactly one time each" do
-        
-        end
-        
-        it "assigns teams according to proper seeding protocol" do
-          
-        end
-      end
-    end
+    #   round? (NO, there should be a callback every time a match is updated that will
+    #     move teams into the next round or into a different bracket depending on the result))
     
   end
   

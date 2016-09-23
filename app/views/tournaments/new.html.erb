@@ -10,12 +10,14 @@
           <h1>Create new tournament</h1>
           <%= form_for @tournament do |f| %>
             <%= f.label :name %>
-            <%= f.text_field :name %><br />
+            <%= f.text_field :name %>
+            <br />
             
-            <%= f.label :tournament_type %>
-            <%= f.select :tournament_type, Tournament.tournament_types.keys %><br />
+            <!--<%= f.label :tournament_type %>-->
+            <!--<%= f.select :tournament_type, Tournament.tournament_types.keys %><br />-->
             
-            <%= f.label :extra_game_option %><br />
+            <%= f.label :extra_game_option %>
+            <br />
             <ul>
               <% Tournament.extra_game_options.each_pair do |key, value| %>
                 <li>
@@ -25,13 +27,40 @@
               <% end %>
             </ul>
             
-            <%= f.label :teams_raw, "Teams" %><br />
+            <%= f.label :teams_raw, "Teams" %>
+            <br />
             <%= f.label :num_teams, "No. Teams" %>
-            <%= f.select :num_teams, [[16, 16], [8, 8], [4, 4], [2, 2]] %><br />
-            <p>Enter each team's name on a separate line.</p>
-            <p>Enter each team's ranking before the team name and separate with a comma (e.g., "1, The Mighty Ducks")</p>
-            <p>If you choose to seed your tournament, all teams must be given an initial seed.</p>
-            <%= f.text_area :teams_raw, placeholder: "Enter teams and seeds here", cols: 45, rows: 8 %><br />
+            <%= f.select :num_teams, [[4, 4], [8, 8], [16, 16]] %>
+            
+            <ul id="team-name-ul">
+              <li>Hello</li>
+              <script>
+                // var numTeams = document.querySelector('#tournament_num_teams');
+              </script>
+            </ul>
+            
+            <script>
+            //   var numTeams = document.querySelector('#tournament_num_teams');
+            //   console.log(numTeams);
+            //   console.log(numTeams.value);
+            </script>
+            
+            <script>
+              var elNumTeams = document.getElementById('tournament_num_teams');
+              var teamNameUl = document.getElementById('team-name-ul');
+              
+              elNumTeams.onchange = function() {
+                var num = elNumTeams.value;
+                teamNameUl.innerHTML = "";
+                
+                for(num; num > 0; num -= 1) {
+                  teamNameUl.insertAdjacentHTML('beforeend', "<li>appended html from a partial</li>")
+                }
+              }
+            </script>
+            <br />
+            
+            
             
             <%= f.label :public, "Public" %>
             <%= f.check_box :public %><br />

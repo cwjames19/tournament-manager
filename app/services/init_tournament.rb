@@ -18,24 +18,9 @@ class InitTournament
   
   
   public
-  #PUBLICPUBLICPUBLICPUBLICPUBLICPUBLICPUBLICPUBLICPUBLICPUBLICPUBLICPUBLICPUBLICPUBLIC
-  
-  def validate_teams
-    parse_teams_raw
-  end
-  
-  def fill_in_tournament(tournament_id)
-    generate_teams(tournament_id, @teams_clean)
-    #generate_matches(tournament_id, @teams_clean)
-  end
-  
-  
-  
-  private
-  #PRIVATEPRIVATEPRIVATEPRIVATEPRIVATEPRIVATEPRIVATEPRIVATEPRIVATEPRIVATEPRIVATEPRIVATE
   
   # delegates raw string of teams to methods dealing with seeded or non-seeded teams
-  def parse_teams_raw
+  def validate_teams
     string = @teams_raw.split("\r\n")
     
     if string.any? { |t| t =~ /^\d+,/ }
@@ -44,6 +29,24 @@ class InitTournament
       return non_seeded_teams(string)
     end
   end
+  
+  #
+  def generate_teams(tournament_id, teams_clean)
+    teams_clean = assign_random_seeds(teams_clean) if teams_clean[0][0] == nil
+    
+    teams_clean.each do |t|
+      Team.create({name: t[1], seed: t[0], tournament_id: tournament_id})
+    end
+    
+    return Success.new(Tournament.find(tournament_id).teams.to_a)
+  end
+  
+  def fill_in_tournament(tournament_id)
+    generate_teams(tournament_id, @teams_clean)
+    GenerateMainBracket.new(tournament_id)
+  end
+  
+  private
   
   # parses string of raw team data and formats into an arrays of arrays
   # containing seed and titleized team name
@@ -62,7 +65,7 @@ class InitTournament
     }
     
     model_seed_array = []
-    for i in 1..(@num_teams.to_i) do model_seed_array[i - 1] = i end
+    1..(@num_teams.to_i).each { |i| model_seed_array[i - 1] = i }
     
     real_seed_array = []
     teams_with_seeds.each {|t| real_seed_array << t[0]}
@@ -96,15 +99,7 @@ class InitTournament
   end
   
   
-  def generate_teams(tournament_id, teams_clean)
-    teams_clean = assign_random_seeds(teams_clean) if teams_clean[0][0] == nil
-    
-    teams_clean.each do |t|
-      Team.create({name: t[1], seed: t[0], tournament_id: tournament_id})
-    end
-    
-    return Success.new(Tournament.find(tournament_id).teams.to_a)
-  end
+  
   
   def assign_random_seeds(unseeded_teams)
     seed_array = []
@@ -114,23 +109,4 @@ class InitTournament
     for i in 0..(unseeded_teams.size - 1) do unseeded_teams[i][0] = seed_array[i] end
     return unseeded_teams
   end
-  
-  def generate_matches(tournament_id)
-    # return Success(true)
-  end
-  
-  # validate parameters
-  # =>.validate
-  # =>new_tournament.parse_teams_raw(tournament_params).success?
-  # =>  accept or return error about seeding
-  # create Tournament object
-  # do other stuff for Tournament object
-  
-  # go through parse_raw_data again or keep instance variable (teams_clean)?
-  # create the right amount of teams with association, correct names, and correct ranking
-  # create the right amount of games with association
-  # create the right amount of rounds
-  # assign the right amount of games to each round
-  # write logic for assigning teams to first round
-  # write logic for teams advancing appropriately
 end
