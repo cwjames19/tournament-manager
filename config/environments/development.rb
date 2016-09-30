@@ -41,4 +41,10 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+  
+  # # Disable "cannot render console in IP ... error message"
+  config.web_console.whitelisted_ips = ['100.9.116.59']
+  config.web_console.whiny_requests = false
 end
+
+

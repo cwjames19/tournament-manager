@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link type="text/css" rel="stylesheet" href="/app/assets/stylesheets/"
 </head>
 <body>
   <section class="container landing-container">
@@ -24,7 +23,7 @@
         <h2 class="text-center">Get started now!</h2>
         <div class="half-jumbotron">
           <h4 class="text-center">Fast and easy to create!<br />Your custom tournament bracket is just clicks away!</h4>
-          <a class="btn btn-info" id="begin" href="<%= new_tournament_path %>" type="submit">Begin</a>
+          <%= link_to "Begin", new_tournament_path %>
         </div>
       </div>
     </div>

@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <link type="text/css" rel="stylesheet" href="/app/assets/stylesheets/tournaments/tournaments_new.scss">
-  </head>
+  <head></head>
   <body>
     <div class="container">
       <div class="row">
         <div class="col-xs-12 col-sm-9">
           <h1>Create new tournament</h1>
           <%= form_for @tournament do |f| %>
+            <%= hidden_field_tag 'user', current_user %>
+            <%= tag(:input, :type => "hidden", :name => request_forgery_protection_token.to_s, :value => form_authenticity_token) %>
             <%= f.label :name %>
             <%= f.text_field :name %>
             <br />
@@ -26,40 +26,21 @@
                 </li>
               <% end %>
             </ul>
-            
             <%= f.label :teams_raw, "Teams" %>
             <br />
             <%= f.label :num_teams, "No. Teams" %>
             <%= f.select :num_teams, [[4, 4], [8, 8], [16, 16]] %>
-            
             <ul id="team-name-ul">
               <%= render partial: "team_name", locals: { f: f } %>
               <%= render partial: "team_name", locals: { f: f } %>
               <%= render partial: "team_name", locals: { f: f } %>
               <%= render partial: "team_name", locals: { f: f } %>
             </ul>
-            
-            <script>
-              // var elNumTeams = document.getElementById('tournament_num_teams');
-              // var teamNameUl = document.getElementById('team-name-ul');
-              
-              // elNumTeams.onchange = function() {
-              //   var num = elNumTeams.value;
-              //   teamNameUl.innerHTML = "";
-                
-              //   for(num; num > 0; num -= 1) {
-              //     teamNameUl.insertAdjacentHTML('beforeend', document.getElementById('team_name_form').innerHTML)
-              //   }
-              // }
-            </script>
             <br />
-            
-            
-            
             <%= f.label :public, "Public" %>
             <%= f.check_box :public %><br />
             
-            <div style = "display: none;" id="team_name_form">
+            <div style = "display: none;" id="team_name_template">
               <%= render partial: "team_name", locals: { f: f } %>
             </div>
             

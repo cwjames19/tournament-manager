@@ -1,4 +1,6 @@
 class TournamentsController < ApplicationController
+  # require 'app/services/tournaments/new.rb'
+  
   def new
     @tournament = Tournament.new
   end
@@ -8,16 +10,14 @@ class TournamentsController < ApplicationController
     @tournament = @user.tournaments.build(tournament_params)
     
     begin
-      new_tournament = InitTournament.new(tournament_params)
       
-      if @tournament.validate! && new_tournament.validate_teams.success?
+      
+      if @tournament.validate!
         @tournament.save!
       else
-        flash[:alert] = "Didn't pass validation. #{new_tournament.validate_teams.data}.\n Please try again."
+        flash[:alert] = "Didn't pass validation.\n Please try again."
         render new_tournament_path and return
       end
-      
-      new_tournament.fill_in_tournament(Tournament.last)
     rescue
       flash[:alert] = "Unknown error raised. Please try again."
       render new_tournament_path and return
