@@ -1,30 +1,28 @@
 class TournamentsController < ApplicationController
-  # require 'app/services/tournaments/new.rb'
   
   def new
     @tournament = Tournament.new
+    @foo = "bar"
   end
   
   def create
-    @user = current_user
-    @tournament = @user.tournaments.build(tournament_params)
-    
-    begin
-      
-      
-      if @tournament.validate!
-        @tournament.save!
-      else
-        flash[:alert] = "Didn't pass validation.\n Please try again."
-        render new_tournament_path and return
+    # begin
+      @user = current_user
+      binding.pry
+      @tournament = @user.tournaments.build(tournament_params)
+
+      if @tournament.save!
+          flash[:alert] = "Passed validation and saved."
+          redirect_to @tournament
+        else
+          flash[:alert] = "Didn't pass validation.\n Please try again."
+          render new_tournament_path #and return
       end
-    rescue
-      flash[:alert] = "Unknown error raised. Please try again."
-      render new_tournament_path and return
-    end
-    
-    flash[:notice] = "Tournament created."
-    redirect_to @tournament
+    # rescue
+    #   puts "create action failed and rescued"
+    #   render new_tournament_path
+    # end
+
   end
   
   def show

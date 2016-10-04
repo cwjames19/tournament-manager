@@ -1,4 +1,7 @@
-<li>
-  <%= f.label :name %>
-  <%= f.text_field :name, multiple: true %>
-</li>
+<!--<li>-->
+<!--  <%= label_tag "Name" %>-->
+<!--  <%= text_field_tag 'tournament[name][]', nil, multiple: true %>-->
+<!--</li>-->
+hello world <br />
+<%= label_tag "tournament_teams_raw" %>
+<%= text_field_tag "tournament[teams_raw][]", '', id: "tournament_teams_raw" %>

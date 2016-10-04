@@ -7,45 +7,30 @@
         <div class="col-xs-12 col-sm-9">
           <h1>Create new tournament</h1>
           <%= form_for @tournament do |f| %>
-            <%= hidden_field_tag 'user', current_user %>
-            <%= tag(:input, :type => "hidden", :name => request_forgery_protection_token.to_s, :value => form_authenticity_token) %>
             <%= f.label :name %>
             <%= f.text_field :name %>
             <br />
-            
-            <!--<%= f.label :tournament_type %>-->
-            <!--<%= f.select :tournament_type, Tournament.tournament_types.keys %><br />-->
-            
             <%= f.label :extra_game_option %>
             <br />
             <ul>
               <% Tournament.extra_game_options.each_pair do |key, value| %>
                 <li>
-                  <%= f.radio_button :extra_game_option, key %>
-                  <%= f.label :extra_game_option, (key[0].upcase + key[1..-1]).gsub!(/_(.)/, ' \1') %>
+                  <%= f.radio_button :extra_game_option, value %>
+                  <%= f.label :extra_game_option, key.capitalize.gsub!(/_(.)/, ' \1') %>
                 </li>
               <% end %>
             </ul>
-            <%= f.label :teams_raw, "Teams" %>
-            <br />
             <%= f.label :num_teams, "No. Teams" %>
             <%= f.select :num_teams, [[4, 4], [8, 8], [16, 16]] %>
-            <ul id="team-name-ul">
-              <%= render partial: "team_name", locals: { f: f } %>
-              <%= render partial: "team_name", locals: { f: f } %>
-              <%= render partial: "team_name", locals: { f: f } %>
-              <%= render partial: "team_name", locals: { f: f } %>
-            </ul>
             <br />
-            <%= f.label :public, "Public" %>
-            <%= f.check_box :public %><br />
-            
-            <div style = "display: none;" id="team_name_template">
-              <%= render partial: "team_name", locals: { f: f } %>
-            </div>
-            
-            <%= f.submit id: 'submit-button' %>
+            <ul id="team-name-ul">
+              <%= render partial: "team_name" %>
+            </ul>
+            <%= f.submit %>
           <% end %>
+        </div>
+        <div style = "display: none;" id="team_name_template">
+          <%= render partial: "team_name" %>
         </div>
       </div>
     </div>
