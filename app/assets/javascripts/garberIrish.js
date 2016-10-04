@@ -20,16 +20,37 @@ var bracketCaptain = {
       
     },
     new: function() {
+      console.log("code for the tournaments:new action");
       /*
       * @desc event handler for changes made to the number of teams in a tournament
       * creates more team name input elements
       */
       document.getElementById('tournament_num_teams').onchange = function(e) {
+        console.log("inside the first onchange callback");
         var num = e.srcElement.value, teamNameUl = document.getElementById('team-name-ul');
         teamNameUl.innerHTML = "";
-        for( num ; num > 0; num -= 1) {
+        
+        for ( num ; num > 0; num -= 1) {
           teamNameUl.insertAdjacentHTML('beforeend', document.getElementById('team_name_template').innerHTML);
         }
+      };
+      
+      document.getElementById('tournament_num_teams').onchange = function(e) {
+        var setSeeds = function() {
+          console.log("in the second onChange callback")
+          var num = e.srcElement.value
+          var seed_elements = document.getElementsByClassName("tournament_team_seeds")
+          
+          for ( var el = 0 ; el <= seed_elements.length ; el += 1 ) {
+            seed_elements[el].innerHTML = "";
+            seed_elements[el].insertAdjacentHTML('beforeend', "<option value=''></option>" )
+            for( var count = 1 ; count <= num ; count += 1 ) {
+              seed_elements[el].insertAdjacentHTML('beforeend', "<option value='" + count + "'>" + count + "</option>" )
+            }
+          }
+        };
+        
+        setTimeout(setSeeds, 300);
       };
     },
     show: function() {
