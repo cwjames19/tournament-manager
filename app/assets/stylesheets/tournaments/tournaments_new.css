@@ -13,3 +13,8 @@ label, p {
 ul {
   list-style-type: none;
 }
+
+input[type='checkbox'] {
+  width: 1.5rem;
+  height: 1.5rem;
+}
