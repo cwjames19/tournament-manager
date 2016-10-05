@@ -20,38 +20,47 @@ var bracketCaptain = {
       
     },
     new: function() {
-      console.log("code for the tournaments:new action");
+      var loadTextFields = new Event('loadedTextFields');
+      
+      document.getElementById("tournament_num_teams").addEventListener('loadedTextFields', setSeedOptions);
+      document.getElementById('tournament_num_teams').onchange = renderTeamNameFields;
+      document.getElementById("tournament_seeded").onchange = disableSeedOptions;
+      
       /*
-      * @desc event handler for changes made to the number of teams in a tournament
-      * creates more team name input elements
+      * @func renderTeamNameFields
+      * @desc dynamically render the correct number of team name text fields
       */
-      document.getElementById('tournament_num_teams').onchange = function(e) {
-        console.log("inside the first onchange callback");
+      function renderTeamNameFields(e) {
         var num = e.srcElement.value, teamNameUl = document.getElementById('team-name-ul');
-        teamNameUl.innerHTML = "";
         
+        teamNameUl.innerHTML = "";
         for ( num ; num > 0; num -= 1) {
           teamNameUl.insertAdjacentHTML('beforeend', document.getElementById('team_name_template').innerHTML);
         }
-      };
+        e.srcElement.dispatchEvent(loadTextFields);
+      }
       
-      document.getElementById('tournament_num_teams').onchange = function(e) {
-        var setSeeds = function() {
-          console.log("in the second onChange callback")
-          var num = e.srcElement.value
-          var seed_elements = document.getElementsByClassName("tournament_team_seeds")
-          
-          for ( var el = 0 ; el <= seed_elements.length ; el += 1 ) {
-            seed_elements[el].innerHTML = "";
-            seed_elements[el].insertAdjacentHTML('beforeend', "<option value=''></option>" )
-            for( var count = 1 ; count <= num ; count += 1 ) {
-              seed_elements[el].insertAdjacentHTML('beforeend', "<option value='" + count + "'>" + count + "</option>" )
-            }
+      /*
+      * @func setSeeds
+      * @desc add the correct number of options to the seed select box with the correct values
+      */
+      function setSeedOptions(e) {
+        var seed_elements = document.getElementsByClassName("tournament_team_seeds");
+        var numTeams = e.srcElement.value;
+
+        for ( var el = 0 ; el <= numTeams ; el += 1 ) {
+          seed_elements[el].innerHTML = "";
+          seed_elements[el].insertAdjacentHTML('beforeend', "<option value=''></option>" );
+          for( var count = 1 ; count <= numTeams ; count += 1 ) {
+            seed_elements[el].insertAdjacentHTML('beforeend', "<option value='" + count + "'>" + count + "</option>" );
           }
-        };
-        
-        setTimeout(setSeeds, 300);
-      };
+        }
+      }
+      
+      function disableSeedOptions(e) {
+        var seedSelectBoxes = $('.tournament_team_seeds, .tournament_team_seeds_label');
+        e.srcElement.checked == false ? seedSelectBoxes.css("display", "none") : seedSelectBoxes.css("display", "initial");
+      }
     },
     show: function() {
       
