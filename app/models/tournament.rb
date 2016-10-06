@@ -1,5 +1,6 @@
 class Tournament < ActiveRecord::Base
-  attr_accessor :game_counter, :sub_bracket_counter
+  # attr_reader :extra_game_option
+  attr_accessor :game_counter, :sub_bracket_counter, :extra_game_option, :name
   
   belongs_to :user
   has_many :matches

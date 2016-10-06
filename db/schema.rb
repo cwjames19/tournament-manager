@@ -76,7 +76,7 @@ ActiveRecord::Schema.define(version: 20160609042053) do
   create_table "tournaments", force: :cascade do |t|
     t.string   "name"
     t.integer  "tournament_type",     default: 0
-    t.integer  "extra_game_option",   default: 0
+    t.integer  "extra_game_option"
     t.string   "image"
     t.boolean  "public",              default: true
     t.text     "teams_raw"
