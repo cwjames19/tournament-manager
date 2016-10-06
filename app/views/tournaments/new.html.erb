@@ -22,6 +22,8 @@
             </ul>
             <%= f.label :num_teams, "No. Teams" %>
             <%= f.select :num_teams, [[4, 4], [8, 8], [16, 16]] %>
+            <%= f.label :seeded? %>
+            <input type="checkbox" id="tournament_seeded" defaultChecked="false">
             <br />
             <ul id="team-name-ul">
               <%= render partial: "team_name" %>
@@ -34,9 +36,6 @@
         </div>
         <div style = "display: none;" id="team_name_template">
           <%= render partial: "team_name" %>
-        </div>
-        <div style="display: none;" id="seed_option_template">
-          <%= render partial: "seed_option" %>
         </div>
       </div>
     </div>

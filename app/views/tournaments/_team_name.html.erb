@@ -1,6 +1,6 @@
 <li>
   <%= label_tag "tournament_teams_raw", "Team Name" %>
   <%= text_field_tag "tournament[teams_raw][]", '', id: "tournament_teams_raw" %>
-  <%= label_tag "tournament_team_seed", "Seed" %>
-  <%= select_tag "tournament[team_seeds][]", options_for_select([1, 2, 3, 4]) , include_blank: true, disabled: false, class: "tournament_team_seeds" %>
+  <%= label_tag "tournament_team_seed", "Seed", class: "tournament_team_seeds_label", style: "display: none" %>
+  <%= select_tag "tournament[team_seeds][]", options_for_select([1, 2, 3, 4]) , include_blank: true, disabled: false, class: "tournament_team_seeds", style: "display: none" %>
 </li>
