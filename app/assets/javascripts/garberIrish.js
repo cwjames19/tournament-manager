@@ -4,12 +4,15 @@ var bracketCaptain = {
       console.log("application-wide code")
     }
   },
-  users: {
+  sessions: {
     init: function() {
-      
+      console.log("Code for all actions in the sessions (users) controller");
     },
     show: function() {
       
+    },
+    new: function() {
+      console.log("Code for sessions(user):new");
     }
   },
   tournaments: {
@@ -18,8 +21,8 @@ var bracketCaptain = {
     },
     new: function() {
       /*
-       * @desc event handler for changes made to the number of teams in a tournament
-       * creates more team name input elements
+      * @desc event handler for changes made to the number of teams in a tournament
+      * creates more team name input elements
       */
       document.getElementById('tournament_num_teams').onchange = function(e) {
         var num = e.srcElement.value, teamNameUl = document.getElementById('team-name-ul');
