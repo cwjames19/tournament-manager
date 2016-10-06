@@ -33,30 +33,24 @@
             <%= f.select :num_teams, [[4, 4], [8, 8], [16, 16]] %>
             
             <ul id="team-name-ul">
-              <li>Hello</li>
-              <script>
-                // var numTeams = document.querySelector('#tournament_num_teams');
-              </script>
+              <%= render partial: "team_name", locals: { f: f } %>
+              <%= render partial: "team_name", locals: { f: f } %>
+              <%= render partial: "team_name", locals: { f: f } %>
+              <%= render partial: "team_name", locals: { f: f } %>
             </ul>
             
             <script>
-            //   var numTeams = document.querySelector('#tournament_num_teams');
-            //   console.log(numTeams);
-            //   console.log(numTeams.value);
-            </script>
-            
-            <script>
-              var elNumTeams = document.getElementById('tournament_num_teams');
-              var teamNameUl = document.getElementById('team-name-ul');
+              // var elNumTeams = document.getElementById('tournament_num_teams');
+              // var teamNameUl = document.getElementById('team-name-ul');
               
-              elNumTeams.onchange = function() {
-                var num = elNumTeams.value;
-                teamNameUl.innerHTML = "";
+              // elNumTeams.onchange = function() {
+              //   var num = elNumTeams.value;
+              //   teamNameUl.innerHTML = "";
                 
-                for(num; num > 0; num -= 1) {
-                  teamNameUl.insertAdjacentHTML('beforeend', "<li>appended html from a partial</li>")
-                }
-              }
+              //   for(num; num > 0; num -= 1) {
+              //     teamNameUl.insertAdjacentHTML('beforeend', document.getElementById('team_name_form').innerHTML)
+              //   }
+              // }
             </script>
             <br />
             
@@ -64,6 +58,10 @@
             
             <%= f.label :public, "Public" %>
             <%= f.check_box :public %><br />
+            
+            <div style = "display: none;" id="team_name_form">
+              <%= render partial: "team_name", locals: { f: f } %>
+            </div>
             
             <%= f.submit id: 'submit-button' %>
           <% end %>
