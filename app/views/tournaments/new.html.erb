@@ -1,15 +1,39 @@
 <!DOCTYPE html>
 <html>
   <head>
-    
+    <link type="text/css" rel="stylesheet" href="/app/assets/stylesheets/tournaments/new_tournament.scss">
   </head>
   <body>
     <div class="container">
       <div class="row">
         <div class="col-xs-12 col-sm-9">
           <h1>Create new tournament</h1>
-          <%= form_for %>
-          
+          <%= form_for @tournament do |f| %>
+            <%= f.label :name %>
+            <%= f.text_field :name %><br />
+            
+            <%= f.label :tournament_type %>
+            <%= f.select :tournament_type, Tournament.tournament_types.keys %><br />
+            
+            <%= f.label :extra_game_option %><br />
+            <ul>
+              <% Tournament.extra_game_options.each_pair do |key, value| %>
+                <li>
+                  <%= f.radio_button :extra_game_option, key %>
+                  <%= f.label :extra_game_option, (key[0].upcase + key[1..-1]).gsub!(/_(.)/, ' \1') %>
+                </li>
+              <% end %>
+            </ul>
+            
+            <%= f.label :teams_raw, "Teams" %><br />
+            <p>Enter each team's name on a separate line.</p>
+            <p>Enter each team's ranking before the team name and separate with a comma. All teams must be given a seed. (OPTIONAL)</p>
+            <%= f.text_area :teams_raw, placeholder: "Enter teams and seeds here", cols: 45, rows: 8 %><br />
+            
+            <%= f.label :public, "Public" %>
+            <%= f.check_box :public %><br />
+            
+            <%= f.submit id: 'submit-button' %>
           <% end %>
         </div>
       </div>

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link type="text/css" rel="stylesheet" href="/app/assets/stylesheets/tournaments/tournaments_show.scss">
+  </head>
+  <body>
+    <h1><%= @tournament.name %></h1>
+    <ul>
+      <%= @tournament.attributes.each_pair do |key, value| %>
+        <li><%= key %>: <%= value %></li>
+      <% end %>
+    </ul>
+  </body>
+</html>
