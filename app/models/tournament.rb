@@ -14,11 +14,15 @@ class Tournament < ActiveRecord::Base
   enum tournament_type: [:single_elimination]
   enum extra_game_options: [:no_extra_games, :bronze_medal_game, :play_to_all_places]
   
-  def increment_sub_bracket_counter
-    self.increment!(:sub_bracket_counter)
-  end
+  private
   
-  def increment_game_counter
-    self.increment!(:game_counter)
-  end
+  
+  
+  # def increment_sub_bracket_counter
+  #   self.increment!(:sub_bracket_counter)
+  # end
+  
+  # def increment_game_counter
+  #   self.increment!(:game_counter)
+  # end
 end
