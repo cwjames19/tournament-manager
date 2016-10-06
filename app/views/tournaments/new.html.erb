@@ -31,6 +31,9 @@
               <%= render partial: "team_name" %>
               <%= render partial: "team_name" %>
             </ul>
+            <%= f.label :public %>
+            <%= f.check_box :public %>
+            <br />
             <%= f.submit %>
           <% end %>
         </div>
