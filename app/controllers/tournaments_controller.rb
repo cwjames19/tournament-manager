@@ -13,7 +13,7 @@ class TournamentsController < ApplicationController
       if @tournament.validate! && new_tournament.validate_teams.success?
         @tournament.save!
       else
-        flash[:alert] = "Didn't pass validation. Please try again."
+        flash[:alert] = "Didn't pass validation. #{new_tournament.validate_teams.data}.\n Please try again."
         render new_tournament_path and return
       end
       

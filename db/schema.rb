@@ -11,10 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160525082703) do
+ActiveRecord::Schema.define(version: 20160609042053) do
 
   create_table "matches", force: :cascade do |t|
-    t.integer  "match_number"
+    t.integer  "num"
     t.string   "winner"
     t.string   "loser"
     t.string   "team_home"
@@ -26,6 +26,8 @@ ActiveRecord::Schema.define(version: 20160525082703) do
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.integer  "tournament_id"
+    t.integer  "round"
+    t.integer  "sub_bracket"
   end
 
   add_index "matches", ["tournament_id"], name: "index_matches_on_tournament_id"
@@ -38,32 +40,55 @@ ActiveRecord::Schema.define(version: 20160525082703) do
   add_index "matches_teams", ["match_id"], name: "index_matches_teams_on_match_id"
   add_index "matches_teams", ["team_id"], name: "index_matches_teams_on_team_id"
 
+  create_table "rounds", force: :cascade do |t|
+    t.integer  "tournaments_id"
+    t.integer  "sub_brackets_id"
+    t.integer  "num"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "rounds", ["sub_brackets_id"], name: "index_rounds_on_sub_brackets_id"
+  add_index "rounds", ["tournaments_id"], name: "index_rounds_on_tournaments_id"
+
+  create_table "sub_brackets", force: :cascade do |t|
+    t.integer  "tournaments_id"
+    t.integer  "num"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.integer  "round_counter",  default: 1
+  end
+
+  add_index "sub_brackets", ["tournaments_id"], name: "index_sub_brackets_on_tournaments_id"
+
   create_table "teams", force: :cascade do |t|
     t.string   "name"
     t.string   "image"
     t.integer  "seed"
     t.integer  "placement"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
-    t.integer  "tournaments_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.integer  "tournament_id"
   end
 
-  add_index "teams", ["tournaments_id"], name: "index_teams_on_tournaments_id"
+  add_index "teams", ["tournament_id"], name: "index_teams_on_tournament_id"
 
   create_table "tournaments", force: :cascade do |t|
     t.string   "name"
-    t.integer  "tournament_type"
-    t.integer  "extra_game_option"
+    t.integer  "tournament_type",     default: 0
+    t.integer  "extra_game_option",   default: 0
     t.string   "image"
-    t.boolean  "public",            default: true
+    t.boolean  "public",              default: true
     t.text     "teams_raw"
     t.boolean  "normal_scoring"
     t.integer  "user_id"
     t.integer  "teams_id"
     t.integer  "matches_id"
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
     t.integer  "num_teams"
+    t.integer  "game_counter",        default: 1
+    t.integer  "sub_bracket_counter", default: 0
   end
 
   add_index "tournaments", ["matches_id"], name: "index_tournaments_on_matches_id"
