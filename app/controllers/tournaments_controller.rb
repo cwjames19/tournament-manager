@@ -10,7 +10,7 @@ class TournamentsController < ApplicationController
     @tournament = @user.tournaments.build(tournament_params)
     # binding.pry
     
-    if @tournament.save!
+    if @tournament.save
         # begin
           create_teams
           create_matches
@@ -22,8 +22,8 @@ class TournamentsController < ApplicationController
         #   render new_tournament_path
         # end
       else
-        flash[:alert] = "Didn't pass validation.\n Please try again."
-        render new_tournament_path #and return
+        flash[:alert] = "Invalid submission."
+        render new_tournament_path
     end
   end
   

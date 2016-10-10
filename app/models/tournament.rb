@@ -1,6 +1,6 @@
 class Tournament < ActiveRecord::Base
-  # ( IF YOU ENABLE ME, I WILL BREAK THE TOURNAMENT#NEW FORM AND WILL NOT PERSIST
-  # EXTRA_GAME_OPTION, MAYBE MORE. ATTR_ACCESSOR IS THE PRIMARY CULPRIT)
+  # (IF YOU ENABLE ME, I WILL BREAK THE TOURNAMENT#NEW FORM AND WILL NOT PERSIST
+  # EXTRA_GAME_OPTION, MAYBE MORE. ATTR_ACCESSOR IS THE CULPRIT DUE TO OVERRIDING ENUM)
   # attr_reader :extra_game_option
   # attr_accessor :game_counter, :sub_bracket_counter, :extra_game_option
   
@@ -10,9 +10,11 @@ class Tournament < ActiveRecord::Base
   has_many :sub_brackets
   has_many :rounds
   
-  # validates :name, presence: true, length: {minimum: 3, maximum: 40}, uniqueness: {scope: :user}
-  # # validates :extra_game_option, presence: true, inclusion: { in: [0, 1, 2]}
-  # # validates :num_teams, presence: true, numericality: {only_integer: true}
+  validates :name, presence: true, length: {in: 3..45}, uniqueness: {scope: :user}
+  validates :user_id, presence: true
+  validates :extra_game_option, presence: true
+  validates :num_teams, presence: true
+  validates :public, presence: true
   
   enum tournament_type: {
     single_elimination: 0

@@ -44,6 +44,7 @@ group :development, :test do
   # Use RSpec for writing tests for models and controllers
   gem 'rspec-rails', '~> 3.4'
   gem 'factory_girl_rails'
+  gem 'shoulda-matchers'
 end
 
 group :development do
