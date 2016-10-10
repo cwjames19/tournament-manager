@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160609042053) do
+ActiveRecord::Schema.define(version: 20161009220133) do
 
   create_table "matches", force: :cascade do |t|
     t.integer  "num"
@@ -76,7 +76,6 @@ ActiveRecord::Schema.define(version: 20160609042053) do
   create_table "tournaments", force: :cascade do |t|
     t.string   "name"
     t.integer  "tournament_type",     default: 0
-    t.integer  "extra_game_option"
     t.string   "image"
     t.boolean  "public",              default: true
     t.text     "teams_raw"
@@ -89,6 +88,7 @@ ActiveRecord::Schema.define(version: 20160609042053) do
     t.integer  "num_teams"
     t.integer  "game_counter",        default: 1
     t.integer  "sub_bracket_counter", default: 0
+    t.integer  "extra_game_option",   default: 0
   end
 
   add_index "tournaments", ["matches_id"], name: "index_tournaments_on_matches_id"
