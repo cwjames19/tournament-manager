@@ -8,8 +8,16 @@ class TournamentsController < ApplicationController
   def create
     @user = current_user
     @tournament = @user.tournaments.build(tournament_params)
-    # binding.pry
-    
+    @v = validate_team_names_and_seeds
+    binding.pry
+    unless @v.empty?
+      flash[:alert] = ""
+      @v.each do |err|
+        flash[:alert] << err + " "
+      end
+      redirect_to new_tournament_path and return
+    end
+
     if @tournament.save
         # begin
           create_teams
@@ -49,5 +57,9 @@ class TournamentsController < ApplicationController
   
   def tournament_params
     params.require(:tournament).permit(:name, :extra_game_option, :num_teams, :public)
+  end
+  
+  def validate_team_names_and_seeds
+    ValidateTeamData.new(params[:tournament][:team_names], params[:tournament][:team_seeds]).validate_team_data
   end
 end
