@@ -1,9 +1,10 @@
 class Tournament < ActiveRecord::Base
+  # include ActiveModel::Validations
   # (IF YOU ENABLE ME, I WILL BREAK THE TOURNAMENT#NEW FORM AND WILL NOT PERSIST
   # EXTRA_GAME_OPTION, MAYBE MORE. ATTR_ACCESSOR IS THE CULPRIT DUE TO OVERRIDING ENUM)
-  # attr_reader :extra_game_option
-  # attr_accessor :game_counter, :sub_bracket_counter, :extra_game_option
-  
+  serialize :team_names, Array
+  serialize :team_seeds, Array
+
   belongs_to :user
   has_many :matches
   has_many :teams
@@ -13,8 +14,12 @@ class Tournament < ActiveRecord::Base
   validates :name, presence: true, length: {in: 3..45}, uniqueness: {scope: :user}
   validates :user_id, presence: true
   validates :extra_game_option, presence: true
-  validates :num_teams, presence: true
+  validates :num_teams, presence: true, numericality: true
+  validates :team_names, presence: true
+  # validates :team_seeds
   validates :public, presence: true
+  # validates_with TeamNamesValidator
+  validates :team_names, team_names: true
   
   enum tournament_type: {
     single_elimination: 0

@@ -8,15 +8,16 @@ class TournamentsController < ApplicationController
   def create
     @user = current_user
     @tournament = @user.tournaments.build(tournament_params)
-    @v = validate_team_names_and_seeds
+    fill_serialized_team_data(@tournament)
+    # @v = validate_team_names_and_seeds
     binding.pry
-    unless @v.empty?
-      flash[:alert] = ""
-      @v.each do |err|
-        flash[:alert] << err + " "
-      end
-      redirect_to new_tournament_path and return
-    end
+    # unless @v.empty?
+    #   flash[:alert] = ""
+    #   @v.each do |err|
+    #     flash[:alert] << err + " "
+    #   end
+    #   redirect_to new_tournament_path and return
+    # end
 
     if @tournament.save
         # begin
@@ -53,6 +54,11 @@ class TournamentsController < ApplicationController
       names: params[:tournament][:team_names],
       seeds: params[:tournament][:team_seeds]
     }).create_teams
+  end
+  
+  def fill_serialized_team_data(record)
+    params[:tournament][:team_names].each{ |name| record.team_names << name }
+    params[:tournament][:team_seeds].each{ |seed| record.team_seeds << seed }
   end
   
   def tournament_params
