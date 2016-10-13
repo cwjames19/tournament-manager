@@ -15,12 +15,10 @@ class Tournament < ActiveRecord::Base
   validates :user_id, presence: true
   validates :extra_game_option, presence: true
   validates :num_teams, presence: true, numericality: true
-  validates :team_names, presence: true
-  # validates :team_seeds
+  validates :team_names, presence: true, team_names: true
+  validates :team_seeds, team_seeds: true
   validates :public, presence: true
-  # validates_with TeamNamesValidator
-  validates :team_names, team_names: true
-  
+
   enum tournament_type: {
     single_elimination: 0
   }
