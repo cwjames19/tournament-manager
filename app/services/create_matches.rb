@@ -1,15 +1,15 @@
 require 'pp'
 
 class CreateMatches
-  def initialize(params)
-    @tournament = params[:tournament]
-    @teams = params[:tournament].teams
+  def initialize(tournament)
+    @tournament = tournament
+    @teams = tournament.teams
   end
   
   attr_reader :teams, :tournament
   
-  def assign_matches_win_loss_records
-    assign_elimination_matches_win_loss_records
+  def assign_all_win_loss_records_to_matches
+    assign_associated_win_loss_records_to_matches(@tournament.matches)
     assign_bronze_match_win_loss_record unless @tournament.extra_game_option == "no_extra_games"
     assign_consolation_matches_win_loss_records if @tournament.extra_game_option == "play_to_all_places"
   end
@@ -34,29 +34,47 @@ class CreateMatches
   
   private
   
-  def create_sub_brackets
+  # def assign_elimination_matches_win_loss_records
+  #   matches = @tournament.matches.to_a
+  #   pp("1: #{matches}")
+  #   matches.shift((@tournament.num_teams) / 2)
     
-  end
+  #   pp("2: #{matches}")
+  #   (Math.log2(@tournament.num_teams) - 1).to_i.times do
+  #     puts("In the first do loop")
+  #     ( calc_matches_in_round(matches) ).times do
+  #       puts("In the second do loop")
+  #       matches.each do |m|
+  #         puts("In the deepest each block")
+  #         pp(m)
+  #         m.win_loss_record << "W"
+  #       end
+  #       matches.shift( calc_matches_in_round(matches) )
+  #     end
+  #   end
+    
+  #   all_matches = @tournament.matches.to_a
+  #   all_matches << nil unless all_matches % 2 == 0
+    
+  #   (Math.log2(@tournament.num_teams) - 1).to_i.times do
+  #     matches_in_this_round = 
+    
+  #   @tournament.matches.save
+  # end
   
-  def assign_elimination_matches_win_loss_records
-    matches = @tournament.matches.to_a
-    pp("1: #{matches}")
-    matches.shift((@tournament.num_teams) / 2)
+  def assign_associated_win_loss_records_to_matches(matches_collection)
+    all_matches = matches_collection.to_a
+    all_matches << nil unless all_matches.length % 2 == 0
     
-    pp("2: #{matches}")
-    (Math.log2(@tournament.num_teams) - 1).to_i.times do
-      puts("In the first do loop")
-      ( calc_matches_in_round(matches) ).times do
-        puts("In the second do loop")
-        matches.each do |m|
-          puts("In the deepest each block")
-          pp(m)
+    for i in 0..((Math.log2(all_matches.length) - 1).to_i)
+      matches_in_this_round = all_matches.shift( all_matches.length / 2)
+      matches_in_this_round.each do |m|
+        i.times do
           m.win_loss_record << "W"
-          m.save
         end
-        matches.shift( calc_matches_in_round(matches) )
       end
     end
+    @tournament.matches.each{ |match| match.save }
   end
   
   def assign_bronze_match_win_loss_record
