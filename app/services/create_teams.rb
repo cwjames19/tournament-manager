@@ -1,19 +1,19 @@
 class CreateTeams
   def initialize(params)
     @tournament = params[:tournament]
-    @names = @tournament.team_names
-    @seeds = @tournament.team_seeds
   end
   
   def create_teams
-    seed_teams if @seeds.any? { |s| s == "" }
-    for i in 0..( @names.length - 1 ) do
-      Team.create!({tournament_id: @tournament.id, name: @names[i], seed: @seeds[i]})
+    seed_teams if @tournament.team_seeds.any?{ |s| s == "" }
+    for i in 0..( @tournament.team_names.length - 1 ) do
+      Team.create({tournament_id: @tournament.id, name: @tournament.team_names[i], seed: @tournament.team_seeds[i]})
     end
   end
   
+  private
+  
   def seed_teams
-    @seeds = [*1..@seeds.length]
-    @seeds.shuffle!
+    @tournament.team_seeds = [*1..@tournament.team_seeds.length].shuffle
+    @tournament.save
   end
 end

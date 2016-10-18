@@ -2,7 +2,6 @@ class TournamentsController < ApplicationController
   
   def new
     @tournament = Tournament.new
-    @foo = "bar"
   end
   
   def create
@@ -12,16 +11,16 @@ class TournamentsController < ApplicationController
     # binding.pry
 
     if @tournament.save
-        begin
+        # begin
           create_teams
           create_matches
           flash[:notice] = "Tournament created successfully."
           redirect_to @tournament
-        rescue
-          # Destroy tournament and its entities.
-          flash[:error] = "There was a problem while creating your tournament."
-          render new_tournament_path
-        end
+        # rescue
+        #   # Destroy tournament and its entities.
+        #   flash[:error] = "There was a problem while creating your tournament."
+        #   render new_tournament_path
+        # end
       else
         flash[:alert] = "Invalid submission."
         render new_tournament_path
@@ -37,7 +36,7 @@ class TournamentsController < ApplicationController
   def create_matches
     cm_instance = CreateMatches.new({tournament: current_user.tournaments.last})
     cm_instance.create_matches
-    # cm_instance.assign_matches
+    cm_instance.assign_matches_win_loss_records
   end
   
   def create_teams
