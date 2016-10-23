@@ -28,7 +28,7 @@ ActiveRecord::Schema.define(version: 20161018053938) do
     t.integer  "tournament_id"
     t.integer  "round"
     t.integer  "sub_bracket"
-    t.string   "win_loss_record"   default: ""
+    t.string   "win_loss_record",  default: ""
   end
 
   add_index "matches", ["tournament_id"], name: "index_matches_on_tournament_id"

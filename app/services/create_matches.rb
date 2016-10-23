@@ -4,14 +4,15 @@ class CreateMatches
   def initialize(tournament)
     @tournament = tournament
     @teams = tournament.teams
+    @matches_in_main_bracket = (@tournament.extra_game_option == 0) ? @tournament.num_teams : (@tournament.num_teams - 1)
   end
   
   attr_reader :teams, :tournament
   
   def assign_all_win_loss_records_to_matches
     assign_associated_win_loss_records_to_matches(@tournament.matches)
-    assign_bronze_match_win_loss_record unless @tournament.extra_game_option == "no_extra_games"
-    assign_consolation_matches_win_loss_records if @tournament.extra_game_option == "play_to_all_places"
+    # assign_bronze_match_win_loss_record unless @tournament.extra_game_option == "no_extra_games"
+    # assign_consolation_matches_win_loss_records if @tournament.extra_game_option == "play_to_all_places"
   end
   
   def create_matches
@@ -34,34 +35,6 @@ class CreateMatches
   
   private
   
-  # def assign_elimination_matches_win_loss_records
-  #   matches = @tournament.matches.to_a
-  #   pp("1: #{matches}")
-  #   matches.shift((@tournament.num_teams) / 2)
-    
-  #   pp("2: #{matches}")
-  #   (Math.log2(@tournament.num_teams) - 1).to_i.times do
-  #     puts("In the first do loop")
-  #     ( calc_matches_in_round(matches) ).times do
-  #       puts("In the second do loop")
-  #       matches.each do |m|
-  #         puts("In the deepest each block")
-  #         pp(m)
-  #         m.win_loss_record << "W"
-  #       end
-  #       matches.shift( calc_matches_in_round(matches) )
-  #     end
-  #   end
-    
-  #   all_matches = @tournament.matches.to_a
-  #   all_matches << nil unless all_matches % 2 == 0
-    
-  #   (Math.log2(@tournament.num_teams) - 1).to_i.times do
-  #     matches_in_this_round = 
-    
-  #   @tournament.matches.save
-  # end
-  
   def assign_associated_win_loss_records_to_matches(matches_collection)
     all_matches = matches_collection.to_a
     all_matches << nil unless all_matches.length % 2 == 0
@@ -73,19 +46,18 @@ class CreateMatches
           m.win_loss_record << "W"
         end
       end
+      assign_consolation_match_win_loss_record(all_matches.last, matches_in_this_round[0].win_loss_record.to_s) if all_matches.length == 1 && all_matches.last != nil
     end
     @tournament.matches.each{ |match| match.save }
   end
   
-  def assign_bronze_match_win_loss_record
-    @tournament.matches.last.win_loss_record << "L"
+  def assign_consolation_match_win_loss_record(match, win_loss_record_of_championship_game)
+    win_loss_record_of_consolation_game = win_loss_record_of_championship_game.split(//)
+    win_loss_record_of_consolation_game[-1] = "L"
+    match.win_loss_record = win_loss_record_of_consolation_game.join
   end
   
   def assign_consolation_matches_win_loss_records
     # create sub_brackets here with service object
-  end
-  
-  def calc_matches_in_round(match_array)
-    match_array.count % 2 == 0 ? match_array.count / 2 : (match_array.count + 1) / 2
   end
 end
