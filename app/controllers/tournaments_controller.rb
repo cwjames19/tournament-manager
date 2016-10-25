@@ -36,7 +36,7 @@ class TournamentsController < ApplicationController
   def create_matches
     cm_instance = CreateMatches.new(current_user.tournaments.last)
     cm_instance.create_matches
-    cm_instance.assign_all_win_loss_records_to_matches()
+    cm_instance.assign_win_loss_records
   end
   
   def create_teams

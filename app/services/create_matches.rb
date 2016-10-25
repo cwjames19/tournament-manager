@@ -3,26 +3,28 @@ require 'pp'
 class CreateMatches
   def initialize(tournament)
     @tournament = tournament
-    @teams = tournament.teams
-    @matches_in_main_bracket = (@tournament.extra_game_option == 0) ? @tournament.num_teams : (@tournament.num_teams - 1)
   end
   
-  attr_reader :teams, :tournament
-  
-  def assign_all_win_loss_records_to_matches
-    assign_associated_win_loss_records_to_matches(@tournament.matches)
-    # assign_bronze_match_win_loss_record unless @tournament.extra_game_option == "no_extra_games"
-    # assign_consolation_matches_win_loss_records if @tournament.extra_game_option == "play_to_all_places"
+  def assign_win_loss_records
+    case  @tournament.extra_game_option
+    when "no_extra_games"
+      assign_win_loss_records_to_championship_bracket_only(@tournament.matches.to_a << nil, false)
+    when "bronze_medal_game"
+      assign_win_loss_records_to_championship_bracket_only(@tournament.matches.to_a, true)
+    when "play_to_all_places"
+      assign_win_loss_records_to_all_brackets(@tournament.matches.last(@tournament.matches.count - (@tournament.num_teams / 2)))
+      @tournament.matches.each{ |match| match.save }
+    end
   end
   
   def create_matches
     case  @tournament.extra_game_option
     when "no_extra_games"
-      optn = @teams.length - 1
+      optn = @tournament.num_teams - 1
     when "bronze_medal_game"
-      optn = @teams.length
+      optn = @tournament.num_teams
     when "play_to_all_places"
-      optn = Math.log2(@teams.length).to_i * ( 2 ** (Math.log2(@teams.length).to_i - 1))
+      optn = Math.log2(@tournament.num_teams).to_i * ( 2 ** (Math.log2(@tournament.num_teams).to_i - 1))
     else
       return raise ArgumentError, 'The extra_game_option was not found to be an acceptable value'
     end
@@ -35,10 +37,8 @@ class CreateMatches
   
   private
   
-  def assign_associated_win_loss_records_to_matches(matches_collection)
-    all_matches = matches_collection.to_a
-    all_matches << nil unless all_matches.length % 2 == 0
-    
+  def assign_win_loss_records_to_championship_bracket_only(all_matches, bronze)
+    matches_in_this_round = []
     for i in 0..((Math.log2(all_matches.length) - 1).to_i)
       matches_in_this_round = all_matches.shift( all_matches.length / 2)
       matches_in_this_round.each do |m|
@@ -46,18 +46,24 @@ class CreateMatches
           m.win_loss_record << "W"
         end
       end
-      assign_consolation_match_win_loss_record(all_matches.last, matches_in_this_round[0].win_loss_record.to_s) if all_matches.length == 1 && all_matches.last != nil
     end
+    
+    assign_bronze_match_win_loss_record(all_matches.first, matches_in_this_round[0].win_loss_record.to_s) if bronze
     @tournament.matches.each{ |match| match.save }
   end
   
-  def assign_consolation_match_win_loss_record(match, win_loss_record_of_championship_game)
-    win_loss_record_of_consolation_game = win_loss_record_of_championship_game.split(//)
-    win_loss_record_of_consolation_game[-1] = "L"
-    match.win_loss_record = win_loss_record_of_consolation_game.join
+  def assign_bronze_match_win_loss_record(match, win_loss_record_of_championship_game)
+    win_loss_record_of_bronze_game = win_loss_record_of_championship_game.split(//)
+    win_loss_record_of_bronze_game[-1] = "L"
+    match.win_loss_record = win_loss_record_of_bronze_game.join
   end
   
-  def assign_consolation_matches_win_loss_records
-    # create sub_brackets here with service object
+  def assign_win_loss_records_to_all_brackets(matches_collection)
+    w_group = matches_collection.first(matches_collection.count / 2)
+    l_group = matches_collection.last(matches_collection.count / 2)
+    w_group.each { |match| match.update({win_loss_record: match.win_loss_record + "W"}) }
+    l_group.each { |match| match.update({win_loss_record: match.win_loss_record + "L"}) }
+    assign_win_loss_records_to_all_brackets(w_group.last(w_group.count / 2)) if w_group.count > 1
+    assign_win_loss_records_to_all_brackets(l_group.last(l_group.count / 2)) if l_group.count > 1
   end
 end
