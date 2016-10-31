@@ -13,7 +13,7 @@ class TournamentsController < ApplicationController
     if @tournament.save
         # begin
           create_teams
-          create_matches
+          create_matches_and_sub_brackets
           flash[:notice] = "Tournament created successfully."
           redirect_to @tournament
         # rescue
@@ -33,10 +33,10 @@ class TournamentsController < ApplicationController
   
   private
   
-  def create_matches
-    cm_instance = CreateMatches.new(current_user.tournaments.last)
-    cm_instance.create_matches
-    cm_instance.assign_win_loss_records
+  def create_matches_and_sub_brackets
+    inst = CreateMatchesAndSubBrackets.new(current_user.tournaments.last)
+    inst.create_matches
+    inst.assign_win_loss_records_and_consolation_sub_brackets
   end
   
   def create_teams
