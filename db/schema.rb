@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161031052220) do
+ActiveRecord::Schema.define(version: 20161031202804) do
 
   create_table "matches", force: :cascade do |t|
     t.integer  "num"
@@ -54,11 +54,11 @@ ActiveRecord::Schema.define(version: 20161031052220) do
 
   create_table "sub_brackets", force: :cascade do |t|
     t.integer  "num"
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-    t.integer  "rounds",        default: 1
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.integer  "rounds",               default: 1
     t.integer  "tournament_id"
-    t.string   "base"
+    t.string   "base_win_loss_record"
   end
 
   create_table "teams", force: :cascade do |t|

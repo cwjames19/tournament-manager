@@ -8,22 +8,16 @@ class TournamentsController < ApplicationController
     @user = current_user
     @tournament = @user.tournaments.build(tournament_params)
     fill_serialized_team_data(@tournament)
-    # binding.pry
 
     if @tournament.save
-        # begin
-          create_teams
-          create_matches_and_sub_brackets
-          flash[:notice] = "Tournament created successfully."
-          redirect_to @tournament
-        # rescue
-        #   # Destroy tournament and its entities.
-        #   flash[:error] = "There was a problem while creating your tournament."
-        #   render new_tournament_path
-        # end
-      else
-        flash[:alert] = "Invalid submission."
-        render new_tournament_path
+      create_teams
+      create_matches_and_sub_brackets
+      assign_first_matches
+      flash[:notice] = "Tournament created successfully."
+      redirect_to @tournament
+    else
+      flash[:alert] = "Invalid submission."
+      render new_tournament_path
     end
   end
   
@@ -33,14 +27,18 @@ class TournamentsController < ApplicationController
   
   private
   
+  def assign_first_matches
+    AssignFirstMatches.new(@tournament).assign_first_round
+  end
+  
   def create_matches_and_sub_brackets
-    inst = CreateMatchesAndSubBrackets.new(current_user.tournaments.last)
+    inst = CreateMatchesAndSubBrackets.new(@tournament)
     inst.create_matches
     inst.assign_win_loss_records_and_consolation_sub_brackets
   end
   
   def create_teams
-    CreateTeams.new({ tournament: current_user.tournaments.last }).create_teams
+    CreateTeams.new(@tournament).create_teams
   end
   
   def fill_serialized_team_data(record)

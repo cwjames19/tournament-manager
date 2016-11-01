@@ -4,7 +4,6 @@ class CreateMatchesAndSubBrackets
   def initialize(tournament)
     @tournament = tournament
     @sub_bracket_creator = SubBracketCreator.new(@tournament)
-    binding.pry
   end
   
   def assign_win_loss_records_and_consolation_sub_brackets
@@ -15,14 +14,11 @@ class CreateMatchesAndSubBrackets
       assign_win_loss_records_to_championship_bracket_only(@tournament.matches.to_a, true)
     when "play_to_all_places"
       assign_win_loss_records_to_all_brackets(@tournament.matches.last(@tournament.matches.count - (@tournament.num_teams / 2)))
-      @tournament.matches.each{ |match| match.save }
     end
-    binding.pry
+    @tournament.matches.each{ |match| match.save }
   end
   
   def create_matches
-    @sub_bracket_creator = SubBracketCreator.new(@tournament)
-    
     case  @tournament.extra_game_option
     when "no_extra_games"
       optn = @tournament.num_teams - 1
@@ -31,11 +27,11 @@ class CreateMatchesAndSubBrackets
     when "play_to_all_places"
       optn = Math.log2(@tournament.num_teams).to_i * ( 2 ** (Math.log2(@tournament.num_teams).to_i - 1))
     else
-      return raise ArgumentError, 'The extra_game_option was not found to be an acceptable value'
+      return raise ArgumentError, 'The extra_game_option was found to be an unacceptable value'
     end
     
     for i in 1..optn do
-      @tournament.matches.create(tournament_id: @tournament.id, num: i, win_loss_record: "", sub_bracket: @tournament.sub_brackets.first)
+      @tournament.matches.create(tournament_id: @tournament.id, win_loss_record: "", sub_bracket: @tournament.sub_brackets.first, num: i)
     end
     @tournament.matches.first.update_column(:num, 1)
   end
@@ -54,7 +50,6 @@ class CreateMatchesAndSubBrackets
     end
     
     assign_bronze_match_win_loss_record(all_matches.first, matches_in_this_round[0].win_loss_record.to_s) if bronze
-    @tournament.matches.each{ |match| match.save }
   end
   
   def assign_bronze_match_win_loss_record(match, win_loss_record_of_championship_game)
@@ -69,6 +64,7 @@ class CreateMatchesAndSubBrackets
     w_group.each { |match| match.update({win_loss_record: match.win_loss_record + "W"}) }
     l_group.each { |match| match.update({win_loss_record: match.win_loss_record + "L"}) }
     @sub_bracket_creator.create_new_sub_bracket(l_group) if l_group.count >= 4
+    
     assign_win_loss_records_to_all_brackets(w_group.last(w_group.count / 2)) if w_group.count > 1
     assign_win_loss_records_to_all_brackets(l_group.last(l_group.count / 2)) if l_group.count > 1
   end
