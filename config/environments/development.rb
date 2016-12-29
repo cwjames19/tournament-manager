@@ -45,6 +45,8 @@ Rails.application.configure do
   # # Disable "cannot render console in IP ... error message"
   config.web_console.whitelisted_ips = ['100.9.116.59']
   config.web_console.whiny_requests = false
+  # React development variant (unminified)
+  config.react.variant = :development
 end
 
 

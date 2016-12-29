@@ -11,24 +11,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161031052220) do
+ActiveRecord::Schema.define(version: 20161224221041) do
 
   create_table "matches", force: :cascade do |t|
     t.integer  "num"
-    t.string   "winner"
-    t.string   "loser"
-    t.string   "team_home"
-    t.string   "team_visitor"
-    t.string   "result_home"
-    t.string   "result_visitor"
-    t.string   "overtime_home"
-    t.string   "overtime_visitor"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.integer  "tournament_id"
-    t.integer  "round"
-    t.string   "win_loss_record"
+    t.string   "required_wlr"
     t.integer  "sub_bracket_id"
+    t.integer  "round_id"
+    t.integer  "team_home_id"
+    t.integer  "team_visitor_id"
+    t.integer  "winner_id"
+    t.integer  "loser_id"
+    t.float    "result_home"
+    t.float    "result_visitor"
+    t.float    "overtime_home"
+    t.float    "overtime_visitor"
   end
 
   add_index "matches", ["tournament_id"], name: "index_matches_on_tournament_id"
@@ -42,23 +42,20 @@ ActiveRecord::Schema.define(version: 20161031052220) do
   add_index "matches_teams", ["team_id"], name: "index_matches_teams_on_team_id"
 
   create_table "rounds", force: :cascade do |t|
-    t.integer  "tournaments_id"
-    t.integer  "sub_brackets_id"
     t.integer  "num"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.integer  "tournament_id"
+    t.integer  "sub_bracket_id"
+    t.string   "common_wlr"
   end
-
-  add_index "rounds", ["sub_brackets_id"], name: "index_rounds_on_sub_brackets_id"
-  add_index "rounds", ["tournaments_id"], name: "index_rounds_on_tournaments_id"
 
   create_table "sub_brackets", force: :cascade do |t|
     t.integer  "num"
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-    t.integer  "rounds",        default: 1
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.integer  "tournament_id"
-    t.string   "base"
+    t.string   "base_wlr"
   end
 
   create_table "teams", force: :cascade do |t|
@@ -66,10 +63,10 @@ ActiveRecord::Schema.define(version: 20161031052220) do
     t.string   "image"
     t.integer  "seed"
     t.integer  "placement"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.integer  "tournament_id"
-    t.string   "win_loss_record"
+    t.string   "current_wlr"
   end
 
   add_index "teams", ["tournament_id"], name: "index_teams_on_tournament_id"

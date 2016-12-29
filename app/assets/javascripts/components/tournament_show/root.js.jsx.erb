@@ -1,0 +1,29 @@
+class Root extends React.Component {
+  constructor(props) {
+    super(props);
+    this.props.sub_brackets = this.props.tournaments
+    console.log("Tournament Props Object: ", this.props)
+  }
+  
+  getSubBrackets() {
+    return(
+      <div>Inside getSubBrackets()</div>
+    );
+  }
+  
+  render() {
+    return(
+      <div className="root">
+        <div>Tournament Render Method</div>
+        {this.getSubBrackets()}
+      </div>
+    );
+  }
+}
+
+Root.propTypes = {
+  tournament: React.PropTypes.array,
+  matches: React.PropTypes.array,
+  teams: React.PropTypes.array,
+  sub_brackets: React.PropTypes.array
+}
