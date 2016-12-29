@@ -1,20 +1,15 @@
 class CreateMatches
   def initialize(params)
-    puts "in the create_matches #initialize"
     @tournament = params[:tournament]
-    @extra_game_option = @tournament.extra_game_option
     @teams = params[:tournament].teams
-    binding.pry
   end
-  
-  attr_reader :tournament, :teams
   
   def assign_matches
     
   end
   
   def create_matches
-    case @extra_game_option
+    case  @tournament.extra_game_option
     when "no_extra_games"
       num = @teams.length - 1
     when "bronze_medal_game"
