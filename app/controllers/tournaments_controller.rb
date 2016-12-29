@@ -8,8 +8,7 @@ class TournamentsController < ApplicationController
   def create
     @user = current_user
     @tournament = @user.tournaments.build(tournament_params)
-    # @tournament.write_attribute(:extra_game_option, params[:tournament][:extra_game_option])
-    binding.pry
+    # binding.pry
     
     if @tournament.save!
         # begin
@@ -35,7 +34,7 @@ class TournamentsController < ApplicationController
   private
   
   def create_matches
-    cm_instance = CreateMatches.new({tournament: current_user.tournaments.last, extra_game_option: params[:tournament][:extra_game_option].to_i})
+    cm_instance = CreateMatches.new({tournament: current_user.tournaments.last})
     cm_instance.create_matches
     # cm_instance.assign_matches
   end

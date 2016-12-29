@@ -15,11 +15,17 @@
             <ul>
               <% Tournament.extra_game_options.each_pair do |key, value| %>
                 <li>
-                  <%= f.radio_button :extra_game_option, value %>
+                  <%= f.radio_button :extra_game_option, key %>
                   <%= f.label :extra_game_option, key.capitalize.gsub!(/_(.)/, ' \1') %>
                 </li>
               <% end %>
             </ul>
+            <!--<%= f.label :extra_game_option %>-->
+            <!--<%= f.select(:extra_game_option) do %>-->
+            <!--  <% Tournament.extra_game_options.each do |c| %>-->
+            <!--    <%= content_tag(:option, c.first, value: c.first) %>-->
+            <!--  <% end %>-->
+            <!--<% end %>-->
             <%= f.label :num_teams, "No. Teams" %>
             <%= f.select :num_teams, [[4, 4], [8, 8], [16, 16]] %>
             <%= f.label :seeded? %>
