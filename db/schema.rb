@@ -88,7 +88,7 @@ ActiveRecord::Schema.define(version: 20161009220133) do
     t.integer  "num_teams"
     t.integer  "game_counter",        default: 1
     t.integer  "sub_bracket_counter", default: 0
-    t.integer  "extra_game_option",   default: 0
+    t.integer  "extra_game_option"
   end
 
   add_index "tournaments", ["matches_id"], name: "index_tournaments_on_matches_id"
