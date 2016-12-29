@@ -1,0 +1,18 @@
+=> [32m#<Tournament:0x000000071e47c0[0m
+ id: [1;34m11[0m,
+ name: [31m[1;31m"[0m[31mwsaedghbpokjm[1;31m"[0m[31m[0m,
+ tournament_type: [1;34m0[0m,
+ image: [1;36mnil[0m,
+ public: [1;36mtrue[0m,
+ normal_scoring: [1;36mnil[0m,
+ user_id: [1;34m1[0m,
+ teams_id: [1;36mnil[0m,
+ matches_id: [1;36mnil[0m,
+ created_at: [1;34;4mTue[0m, [1;34m27[0m [1;34;4mDec[0m [1;34m2016[0m [1;34m00[0m:[1;34m48[0m:[1;34m17[0m [1;34;4mUTC[0m [1;34m+00[0m:[1;34m00[0m,
+ updated_at: [1;34;4mTue[0m, [1;34m27[0m [1;34;4mDec[0m [1;34m2016[0m [1;34m00[0m:[1;34m48[0m:[1;34m17[0m [1;34;4mUTC[0m [1;34m+00[0m:[1;34m00[0m,
+ num_teams: [1;34m8[0m,
+ game_counter: [1;34m1[0m,
+ sub_bracket_counter: [1;34m0[0m,
+ extra_game_option: [1;34m2[0m,
+ team_names: [[31m[1;31m"[0m[31mfdrszxfcgv[1;31m"[0m[31m[0m, [31m[1;31m"[0m[31mhbjihu[1;31m"[0m[31m[0m, [31m[1;31m"[0m[31mbjnkjihugyv[1;31m"[0m[31m[0m, [31m[1;31m"[0m[31mygftdrxfc[1;31m"[0m[31m[0m, [31m[1;31m"[0m[31mgtfdrxfcg[1;31m"[0m[31m[0m, [31m[1;31m"[0m[31mvyftcgvhb[1;31m"[0m[31m[0m, [31m[1;31m"[0m[31mubjnhuvbgyfcv[1;31m"[0m[31m[0m, [31m[1;31m"[0m[31mhgyftcgvc[1;31m"[0m[31m[0m],
+ team_seeds: [[1;34m7[0m, [1;34m2[0m, [1;34m8[0m, [1;34m6[0m, [1;34m4[0m, [1;34m1[0m, [1;34m5[0m, [1;34m3[0m][32m>[0m

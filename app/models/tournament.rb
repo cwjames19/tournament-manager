@@ -9,7 +9,7 @@ class Tournament < ActiveRecord::Base
   has_many :matches
   has_many :teams
   has_many :sub_brackets
-  has_many :rounds
+  has_many :rounds, through: :sub_brackets
   
   validates :name, presence: true, length: {in: 3..45}, uniqueness: {scope: :user}
   validates :user_id, presence: true

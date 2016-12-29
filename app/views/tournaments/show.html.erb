@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link type="text/css" rel="stylesheet" href="/app/assets/stylesheets/tournaments/tournaments_show.scss">
+    <link type="text/css" rel="stylesheet" href="/app/assets/stylesheets/tournaments/tournaments_show.css.sass">
   </head>
   <body>
+    
+    
+    <%= render partial: @tournament %>
+    
+    
     <h1><%= @tournament.name %></h1>
     <ul>
       <%= @tournament.attributes.each_pair do |key, value| %>
