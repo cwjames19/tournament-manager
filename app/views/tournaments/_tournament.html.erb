@@ -1,2 +1,5 @@
-<div>Inside _tournament.html.erb</div>
-<div><%= tournament.name %></div>
+<div class="tournament">
+  <h2 id="tournament-name"><%= tournament.name %></h2>
+  <% @max_rounds = tournament.sub_brackets.first.rounds.count %>
+  <%= render partial: "sub_bracket", collection: tournament.sub_brackets, locals: {max_rounds: @max_rounds}%>
+</div>

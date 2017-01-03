@@ -1,0 +1,92 @@
+.tournament
+  display: flex
+  flex-direction: column
+  margin: 0rem 2rem
+  min-width: 60rem
+  box-sizing: border-box
+  
+  
+  *
+    box-sizing: border-box
+    display: inherit
+    
+  h2
+    display: block
+    margin: auto
+    
+  .sub_bracket
+    display: inherit
+    flex-direction: row
+    margin-top: 2rem
+    flex-grow: 1
+    
+  .round
+    flex-direction: column
+    justify-content: space-around
+    flex: 1 0 0
+  
+  .match
+    flex-direction: row
+    display: flex
+    flex: 1
+    
+  .matchup
+    display: flex
+    border-color: lightblue
+    padding: 2.5rem 0rem
+    min-width: 16rem
+    flex-direction: column
+    justify-content: center
+    flex: 1 0 auto
+    
+  .lines
+    display: flex
+    border-color: lightgrey
+    flex-direction: row
+    flex: 1 1 0
+    
+    .left, .right, *
+      flex-basis: 50%
+
+    .left, .right
+      flex-direction: column
+      
+    .left .top
+      border-bottom: 1px solid red
+      
+    .right.even .bottom
+      border-left: 1px solid red
+      border-bottom: 1px solid red
+      
+    .right.odd .top
+      border-left: 1px solid red
+    
+  .team
+    display: block
+    border: 2px solid lightgreen
+    height: 3.75rem
+    line-height: 3.75rem
+
+    *
+      display: inline-block
+      vertical-align: middle
+      line-height: normal
+      border: none
+    
+    .team_seed
+      margin-left: 0.4rem
+      font-size: 0.7rem
+
+    .team_name
+      font-size: 0.85em
+
+    .team_result
+      color: black
+      text-align: center
+      float: right
+      min-width: 2rem
+      margin: 0.4rem 0.4rem 0.4rem 0rem
+      height: calc(2.95rem - 4px)
+      background-color: lightgrey
+      
+  

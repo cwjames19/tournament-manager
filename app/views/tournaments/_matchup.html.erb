@@ -1,0 +1,6 @@
+<div class="matchup">
+  <% matchup.team_home_id ? @team_home = Team.find(matchup.team_home_id) : @team_home = nil %>
+  <% matchup.team_visitor_id ? @team_visitor = Team.find(matchup.team_visitor_id) : @team_visitor = nil %>
+  <%= render partial: "team", locals: {team: @team_home, match: matchup } %>
+  <%= render partial: "team", locals: {team: @team_visitor, match: matchup} %>
+</div>
