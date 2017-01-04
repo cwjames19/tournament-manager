@@ -51,15 +51,11 @@ module InitTournament
     end
     
     def assign_wlr_and_consolation_sub_brackets
-      case  @tournament.extra_game_option
-      when "no_extra_games"
-        assign_wlr_championship_only(@tournament.matches.to_a << nil, false)
-      when "bronze_medal_game"
-        assign_wlr_championship_only(@tournament.matches.to_a, true)
-      when "play_to_all_places"
-        assign_wlr_all(@tournament.matches.last(@tournament.matches.count - (@tournament.num_teams / 2)))
+      if @tournament.extra_game_option == "play_to_all_places"
+        separate_matches_into_sb(@tournament.matches.all.to_a)
+        add_sb_wlr
       end
-      @tournament.matches.each{ |match| match.save }
+      @tournament.sub_brackets.each {|sb| assign_wlr_to_matches(sb) }
     end
     
     def create_matches
@@ -82,35 +78,61 @@ module InitTournament
     
     private
     
-    def assign_wlr_championship_only(all_matches, bronze)
+    def separate_matches_into_sb(m_collection)
+      m_collection.shift(@tournament.num_teams)
+      sb_size = @tournament.num_teams / 2
+      iterations = 1
+      while sb_size >= 4 do
+        iterations.times do
+          @sub_bracket_creator.create_new_sub_bracket(m_collection.shift(sb_size))
+        end
+        sb_size /= 2
+        iterations *= 2
+      end
+    end
+    
+    def add_sb_wlr
+      sb_count = @tournament.sub_brackets.count
+      sb_collection = @tournament.sub_brackets.last(sb_count - 1).to_a
+      sb_count_of_this_match_size = 1
+      
+      Math.log2(sb_count).to_i.times do
+        sbs_of_focus = sb_collection.shift(sb_count_of_this_match_size)
+        if (sbs_of_focus.count == 1)
+          sbs_of_focus[0].update({base_wlr: "L"})
+        else
+          prepend_half_half(sbs_of_focus)
+          sbs_of_focus.each { |sb| sb.update({base_wlr: sb.base_wlr << "L"}) }
+        end
+        sb_count_of_this_match_size *= 2
+      end
+    end
+    
+    def prepend_half_half(collection)
+      pp(collection.to_s)
+      l_group = collection.first(collection.count / 2)
+      w_group = collection.last(collection.count / 2)
+      l_group.each {|sb| sb.update({base_wlr: sb.base_wlr.prepend("L")})}
+      w_group.each {|sb| sb.update({base_wlr: sb.base_wlr.prepend("W")})}
+      [w_group, l_group].each {|group| prepend_half_half(group) if group.count > 1}
+    end
+    
+    def assign_wlr_to_matches(sub_bracket)
+      all_matches = sub_bracket.matches.to_a.each{ |m| m.required_wlr = sub_bracket.base_wlr }
+      all_matches << nil if all_matches.count % 2 == 1
+      
       matches_in_this_round = []
       for i in 0..((Math.log2(all_matches.length) - 1).to_i)
         matches_in_this_round = all_matches.shift( all_matches.length / 2)
-        matches_in_this_round.each do |m|
-          i.times do
-            m.required_wlr << "W"
-          end
-        end
+        wins_string = "W" * i
+        matches_in_this_round.each{ |m| m.update({required_wlr: m.required_wlr << wins_string}) }
       end
       
-      assign_bronze_match_wlr(all_matches.first, matches_in_this_round[0].required_wlr.to_s) if bronze
-    end
-    
-    def assign_bronze_match_wlr(match, wlr_of_championship_game)
-      wlr_of_bronze_game = wlr_of_championship_game.split(//)
-      wlr_of_bronze_game[-1] = "L"
-      match.required_wlr = wlr_of_bronze_game.join
-    end
-    
-    def assign_wlr_all(m_collection)
-      w_group = m_collection.first(m_collection.count / 2)
-      l_group = m_collection.last(m_collection.count / 2)
-      w_group.each { |match| match.update({required_wlr: match.required_wlr + "W"}) }
-      l_group.each { |match| match.update({required_wlr: match.required_wlr + "L"}) }
-      @sub_bracket_creator.create_new_sub_bracket(l_group) if l_group.count >= 4
-      
-      assign_wlr_all(w_group.last(w_group.count / 2)) if w_group.count > 1
-      assign_wlr_all(l_group.last(l_group.count / 2)) if l_group.count > 1
+      unless all_matches[0] == nil
+        champ_game_wlr = matches_in_this_round[0].required_wlr.split(//)
+        champ_game_wlr[-1] = "L"
+        all_matches[0].update({required_wlr: champ_game_wlr.join})
+      end
     end
   end
   
@@ -146,7 +168,7 @@ module InitTournament
     
     def create_new_sub_bracket(m_collection)
       @bracket_count += 1
-      new_sb = @tournament.sub_brackets.create!({num: @bracket_count, base_wlr: m_collection.first.required_wlr })
+      new_sb = @tournament.sub_brackets.create!({num: @bracket_count, base_wlr: "" })
       m_collection.each { |match| match.update({sub_bracket: new_sb}) }
     end
   end

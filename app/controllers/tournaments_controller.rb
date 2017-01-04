@@ -19,10 +19,10 @@ class TournamentsController < ApplicationController
       InitTournament.assign_matches_to_rounds(@tournament)
       InitTournament.assign_teams_to_first_round_matches(@tournament)
       flash[:notice] = "Tournament created successfully."
-      redirect_to @tournament
+      redirect_to new_tournament_path
     else
       flash[:alert] = "Invalid submission."
-      render new_tournament_path
+      render @tournament
     end
   end
   
