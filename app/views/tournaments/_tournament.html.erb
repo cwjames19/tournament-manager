@@ -1,5 +1,5 @@
-<div class="tournament">
+<% @max_rounds = tournament.sub_brackets.first.rounds.count %>
+<div class="tournament" data-max-rounds="<%= @max_rounds.to_i.to_s %>">
   <h2 id="tournament-name"><%= tournament.name %></h2>
-  <% @max_rounds = tournament.sub_brackets.first.rounds.count %>
   <%= render partial: "sub_bracket", collection: tournament.sub_brackets, locals: {max_rounds: @max_rounds}%>
 </div>

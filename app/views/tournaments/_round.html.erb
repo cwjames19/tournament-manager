@@ -1,3 +1,7 @@
-<div class="round">
+<% round.matches.count == 1 && round.sub_bracket.matches.count % 2 == 0 ? @consolation = true : @consolation = false %> 
+<div class="round <%= @consolation ? "final" : "" %>" >
   <%= render partial: "match", collection: round.matches %>
+  <% if @consolation %>
+    <%= render partial: "matchup", locals: { matchup: round.sub_bracket.matches.where(round_id: nil).first, consolation: true } %>
+  <% end %>
 </div>

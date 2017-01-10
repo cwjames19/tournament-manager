@@ -1,5 +1,5 @@
 <div class="match">
-  <%= render partial: "matchup", object: match %>
+  <%= render partial: "matchup", locals: { matchup: match, consolation: false } %>
   <% Round.find(match.round_id).num == SubBracket.find(match.sub_bracket_id).rounds.count ? @final_round = true : @final_round = false %>
   <%= render partial: "lines", locals: { even: match_counter % 2 == 0, final_round: @final_round } %>
 </div>

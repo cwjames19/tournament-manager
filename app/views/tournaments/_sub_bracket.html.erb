@@ -1,6 +1,6 @@
-<div class="sub_bracket">
+<% @rounds_delta = max_rounds - sub_bracket.rounds.count %>
+<div class="sub_bracket" data-rounds-delta="<%= @rounds_delta %>">
   <%= render partial: "round", collection: sub_bracket.rounds %>
-  <% @rounds_delta = max_rounds - sub_bracket.rounds.count %>
   <% @rounds_delta.times do %>
     <div class="round"></div>
   <% end %>

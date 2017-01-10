@@ -1,0 +1,147 @@
+.tournament {
+  display: flex;
+  flex-direction: column;
+  margin: 0rem 2rem;
+  min-width: 60rem;
+  box-sizing: border-box;
+  
+  * {
+    box-sizing: border-box;
+    display: inherit;
+    border: 1px solid white;
+  }
+    
+  h2 {
+    display: block;
+    margin: auto;
+  }
+    
+  .sub_bracket {
+    display: inherit;
+    flex-direction: row;
+    margin-top: 2rem;
+    flex-grow: 1;
+  }
+    
+  .round {
+    flex-direction: column;
+    justify-content: space-around;
+    flex: 1 0 0;
+  }
+  
+  .round.final {
+    display: block;
+    
+    > * {
+      position: relative;
+      top: calc(50% - 3.75rem - 1px);
+    }
+    
+    .matchup {
+      padding: 0;
+    }
+    
+    .matchup[data-consolation="true"] {
+      float: left;
+      background-color: green;
+      position: relative;
+      left: calc((100% - 16rem) / 2);
+      margin-top: 1.4rem;
+      padding: 0em;
+      width: 12rem;
+      
+      .team {
+        height: 1.8em;
+        line-height: 1.8em;
+        flex-direction: row-reverse;
+        
+        .team_result {
+          margin: 0.15em 0.05em 0.15em 0.15em;
+          height: calc(1.8em - 0.3em - 4px);
+        }
+      }
+    }
+  }
+  
+  .match {
+    display: inherit;
+    flex-direction: row;
+    display: flex;
+    flex: 1;
+  }
+    
+  .matchup {
+    display: inherit;
+    border-color: lightblue;
+    padding: 2.5rem 0rem;
+    min-width: 16rem;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1 0 auto;
+  }
+    
+  .lines {
+    display: inherit;
+    min-width: 1.6rem;
+    flex-direction: row;
+    flex: 1 1 0;
+
+    .left, .right, * {
+      flex-basis: 50%;
+    }
+
+    .left, .right {
+      flex-direction: column;
+    }
+      
+    .left .top {
+      border-bottom: 1px solid red;
+    }
+      
+    .right.even .bottom {
+      border-left: 1px solid red;
+      border-bottom: 1px solid red;
+    }
+      
+    .right.odd .top {
+      border-left: 1px solid red;
+    }
+  }
+    
+  .team {
+    display: flex;
+    border: 2px solid lightgreen;
+    height: 2.75em;
+    line-height: calc(2.75em - 4px);
+    flex-direction: row;
+
+    * {
+      vertical-align: middle;
+      line-height: inherit;
+      border: none;
+    }
+    
+    .team_seed {
+      flex: 0 0 8%; 
+      margin-left: 0.4em;
+      font-size: 0.7em;
+    }
+    
+    .team_name {
+      flex: 3 0 50%;
+      font-size: 0.85em;
+      margin-left: 0.2em;
+    }
+    
+    .team_result {
+      flex: 2 0 10%;
+      color: black;
+      text-align: center;
+      float: right;
+      min-width: 2em;
+      margin: 0.25em 0.25em 0.25em 0.1em;
+      height: calc(2.75em - 0.5em - 4px);
+      background-color: lightgrey;
+    }
+  }
+}
