@@ -3,14 +3,19 @@ require 'pp'
 module InitTournament
   def InitTournament.assign_teams_to_first_round_matches(tournament)
     first_round_matches = tournament.matches.where(required_wlr: "").order(num: :asc).to_a
-    included_teams = tournament.teams.all.order(seed: :asc).to_a
-    while first_round_matches.any? do
-      active_match = first_round_matches.shift
-      active_match.teams << included_teams.shift
-      active_match.teams << included_teams.pop
-      active_match.team_home_id = active_match.teams.first.id
-      active_match.team_visitor_id = active_match.teams.second.id
-      active_match.save
+    first_round_matches.each do |match|
+      match.update({
+        team_home_id: Team.find_by({
+          tournament_id: tournament.id,
+          prog_wlr: "",
+          og_seed: match.required_seed_home
+        }).id,
+        team_visitor_id: Team.find_by({
+          tournament_id: tournament.id,
+          prog_wlr: "",
+          og_seed: match.required_seed_visitor
+        }).id
+      })
     end
   end
   
@@ -42,6 +47,61 @@ module InitTournament
   
   def InitTournament.create_teams(tournament)
     CreateTeams.new(tournament).create_teams
+  end
+  
+  def InitTournament.assign_required_seeds_to_matches(tournament)
+    AssignRequiredSeedsToMatches.new(tournament).assign_each_sub_bracket
+  end
+  
+  class AssignRequiredSeedsToMatches
+    def initialize(tournament)
+      @tournament = tournament
+    end
+    
+    def assign_each_sub_bracket
+      @tournament.sub_brackets.each do |sb|
+        seed_range = find_seed_range(sb)
+        sb.rounds.order(num: :asc).each do |round|
+          assign_each_round(round, seed_range)
+          seed_range = seed_range.first(seed_range.count / 2)
+        end
+      end
+    end
+    
+    private
+    
+    def find_seed_range(sb)
+      seed_range = [*1..@tournament.num_teams]
+      wlr = sb.base_wlr.split('')
+      until wlr.empty?
+        if wlr.shift == "W"
+          seed_range = seed_range.first(seed_range.count/ 2)
+        else
+          seed_range = seed_range.last(seed_range.count / 2)
+        end
+      end
+      return seed_range
+    end
+    
+    def assign_each_round(round, range)
+      matches = round.matches.to_a
+      top_half = range.first(range.count / 2)
+      bottom_half = range.last(range.count / 2)
+      counter = 0
+      until matches.empty?
+        counter += 1
+        current_seeds = [top_half.shift, bottom_half.pop]
+        matches.shift.update({required_seeds: current_seeds,
+                              required_seed_home: current_seeds[0],
+                              required_seed_visitor: current_seeds[-1]
+        })
+        matches.reverse!
+        if counter == 2
+          [top_half, bottom_half].each(&:reverse!)
+          counter = 0
+        end
+      end
+    end
   end
   
   class CreateMatchesAndSubBrackets
@@ -109,7 +169,6 @@ module InitTournament
     end
     
     def prepend_half_half(collection)
-      pp(collection.to_s)
       l_group = collection.first(collection.count / 2)
       w_group = collection.last(collection.count / 2)
       l_group.each {|sb| sb.update({base_wlr: sb.base_wlr.prepend("L")})}
@@ -144,7 +203,12 @@ module InitTournament
     def create_teams
       seed_teams if @tournament.team_seeds.any?{ |s| s == "" }
       for i in 0..( @tournament.team_names.length - 1 ) do
-        Team.create({tournament_id: @tournament.id, name: @tournament.team_names[i], seed: @tournament.team_seeds[i], current_wlr: ""})
+        Team.create({ tournament_id: @tournament.id,
+                      name: @tournament.team_names[i],
+                      og_seed: @tournament.team_seeds[i],
+                      prog_seed: @tournament.team_seeds[i],
+                      prog_wlr: ""
+        })
       end
     end
     

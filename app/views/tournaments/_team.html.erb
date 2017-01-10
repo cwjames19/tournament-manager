@@ -1,10 +1,10 @@
 <div class="team">
   <% if team %>
-    <p class="team_seed"><%= team.seed %></p>
+    <p class="team_og_seed"><%= team.og_seed %></p>
     <p class="team_name"><%= team.name %></p>
     <p class="team_result"><%= match.team_home_id == team.id ? match.result_home : match.result_visitor %></p>
   <% else %>
-    <p class="team_seed"></p>
+    <p class="team_og_seed"></p>
     <p class="team_name"></p>
     <p class="team_result"></p>
   <% end %>

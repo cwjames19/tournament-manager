@@ -17,12 +17,13 @@ class TournamentsController < ApplicationController
       InitTournament.create_matches_and_sub_brackets(@tournament)
       InitTournament.create_rounds(@tournament)
       InitTournament.assign_matches_to_rounds(@tournament)
+      InitTournament.assign_required_seeds_to_matches(@tournament)
       InitTournament.assign_teams_to_first_round_matches(@tournament)
       flash[:notice] = "Tournament created successfully."
-      redirect_to new_tournament_path
+      render @tournament
     else
       flash[:alert] = "Invalid submission."
-      render @tournament
+      redirect_to new_tournament_path
     end
   end
   
